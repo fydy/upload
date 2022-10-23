@@ -1,0 +1,27 @@
+name: Clone Repo 
+description: 在github action 运行Clone Repo并上传至自己仓库的新分支程序
+inputs:
+  clone_repo_url:
+    description: '需要克隆的仓库地址'
+    required: true
+  upload_repo:
+    description: '上传仓库地址'
+    required: true
+  github_user:
+    description: '用户名'
+    required: true
+  github_token:
+    description: 'github上传密匙'
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: upload
+      shell: bash
+      run: |
+        git clone $clone_repo_url repo_temp
+        cd ${{ github.action_path }}/repo_temp
+        repo_name = basename `git rev-parse --show-toplevel`
+        git config --global user.email "$github_email"
+        git config --global user.name "$github_name"
+        rm -rf .git && git init && git remote add origin git@github.com:$github_user/$upload_repo.git && git add . && git checkout -b $repo_name && git commit -m "GitHub Actions Auto Upload" && git push --force --quiet https://$github_user:$github_token@github.com/$upload_repo $repo_name:$repo_name
