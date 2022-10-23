@@ -24,8 +24,9 @@ runs:
       run: |
         git clone ${{ inputs.clone_repo_url }} repo_temp
         cd repo_temp
+        ls
         repo_name=basename `git rev-parse --show-toplevel`
         git config --global user.email "${{ inputs.github_email }}"
         git config --global user.name "${{ inputs.github_user }}"
-        rm -rf .git && git init && git remote add origin git@github.com:${{ inputs.github_user }}/${{ inputs.upload_repo }}.git && git add . && git checkout -b $repo_name && git commit -m "GitHub Actions Auto Upload" && git push --force --quiet https://${{ inputs.github_user }}:${{ inputs.github_token }}@github.com/$upload_repo $repo_name:$repo_name
+        rm -rf .git && git init && git remote add origin git@github.com:${{ inputs.github_user }}/${{ inputs.upload_repo }}.git && git add . && git checkout -b ${{ repo_name }} && git commit -m "GitHub Actions Auto Upload" && git push --force --quiet https://${{ inputs.github_user }}:${{ inputs.github_token }}@github.com/${{ inputs.upload_repo }} ${{ repo_name }}:${{ repo_name }}
         cd ${{ github.action_path }} && ls -a && pwd
