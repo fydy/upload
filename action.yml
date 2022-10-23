@@ -10,6 +10,9 @@ inputs:
   github_user:
     description: '用户名'
     required: true
+  github_email:
+    description: '邮箱'
+    required: true
   github_token:
     description: 'github上传密匙'
     required: true
@@ -23,5 +26,5 @@ runs:
         cd ${{ github.action_path }}/repo_temp
         repo_name = basename `git rev-parse --show-toplevel`
         git config --global user.email "$github_email"
-        git config --global user.name "$github_name"
+        git config --global user.name "$github_user"
         rm -rf .git && git init && git remote add origin git@github.com:$github_user/$upload_repo.git && git add . && git checkout -b $repo_name && git commit -m "GitHub Actions Auto Upload" && git push --force --quiet https://$github_user:$github_token@github.com/$upload_repo $repo_name:$repo_name
