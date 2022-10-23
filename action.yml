@@ -22,11 +22,9 @@ runs:
     - name: upload
       shell: bash
       run: |
-        mkdir repo_temp
-        cd repo_temp
-        git clone $clone_repo_url
+        git clone ${{ inputs.clone_repo_url }} repo_temp
         cd ${{ github.action_path }}/repo_temp
         repo_name = basename `git rev-parse --show-toplevel`
-        git config --global user.email "$github_email"
-        git config --global user.name "$github_user"
-        rm -rf .git && git init && git remote add origin git@github.com:$github_user/$upload_repo.git && git add . && git checkout -b $repo_name && git commit -m "GitHub Actions Auto Upload" && git push --force --quiet https://$github_user:$github_token@github.com/$upload_repo $repo_name:$repo_name
+        git config --global user.email "${{ inputs.github_email }}"
+        git config --global user.name "${{ inputs.github_user }}"
+        rm -rf .git && git init && git remote add origin git@github.com:${{ inputs.github_user }}/${{ inputs.upload_repo }}.git && git add . && git checkout -b $repo_name && git commit -m "GitHub Actions Auto Upload" && git push --force --quiet https://${{ inputs.github_user }}:${{ inputs.github_token }}@github.com/$upload_repo $repo_name:$repo_name
