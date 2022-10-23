@@ -24,7 +24,7 @@ runs:
       run: |
         mkdir repo_temp
         cd repo_temp
-        git clone $clone_repo_url ./
+        git clone $clone_repo_url
         cd ${{ github.action_path }}/repo_temp
         repo_name = basename `git rev-parse --show-toplevel`
         git config --global user.email "$github_email"
