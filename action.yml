@@ -7,7 +7,7 @@ inputs:
   upload_repo:
     description: '上传仓库地址'
     required: false
-    default: 'GITHUB_ACTION_REPOSITORY'
+    default: 'GITHUB_REPOSITORY'
   user_name:
     description: 'Github user name || Github 用户名'
     required: false
@@ -35,8 +35,7 @@ runs:
         git clone ${{ inputs.clone_repo_url }} repo_temp
         cd repo_temp
         ls
-        CLONE_REPO_DIR=${{ inputs.clone_repo_url##*/ }}
         git config user.name "${GITHUB_ACTOR}"
         git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-        rm -rf .git && git init && git remote add origin git@github.com:${{ inputs.upload_repo }}.git && git add . && git checkout -b ${{ CLONE_REPO_DIR }} && git commit -m "GitHub Actions Auto Builder at $(date +'%Y-%m-%d %H:%M:%S')" && git push --force --quiet https://${{ inputs.user_name }}:${{ inputs.github_token }}@github.com/${{ inputs.upload_repo }} ${{ CLONE_REPO_DIR }}:${{ CLONE_REPO_DIR }}
+        rm -rf .git && git init && git remote add origin git@github.com:${{ inputs.upload_repo }}.git && git add . && git checkout -b $(basename $clone_url .git) && git commit -m "GitHub Actions Auto Builder at $(date +'%Y-%m-%d %H:%M:%S')" && git push --force --quiet https://${{ inputs.user_name }}:${{ inputs.github_token }}@github.com/${{ inputs.upload_repo }} $(basename $clone_url .git):$(basename $clone_url .git)
  #       cd ${{ github.action_path }} && ls -a && pwd
