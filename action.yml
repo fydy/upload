@@ -35,7 +35,7 @@ runs:
         git clone ${{ inputs.clone_repo_url }} repo_temp
         cd repo_temp
         ls
-        git config user.name "${{ inputs.user_name }}"
-        git config user.email "${{ inputs.user_email }}"
+        git config user.name ${{ inputs.user_name }}
+        git config user.email ${{ inputs.user_email }}
         rm -rf .git && git init && git remote add origin git@github.com:${{ inputs.upload_repo }}.git && git add . && git checkout -b $(basename $clone_url .git) && git commit -m "GitHub Actions Auto Builder at $(date +'%Y-%m-%d %H:%M:%S')" && git push --force --quiet https://${{ inputs.user_name }}:${{ inputs.github_token }}@github.com/${{ inputs.upload_repo }} $(basename $clone_url .git):$(basename $clone_url .git)
  #       cd ${{ github.action_path }} && ls -a && pwd
