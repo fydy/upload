@@ -7,7 +7,7 @@ inputs:
   upload_repo:
     description: '上传仓库地址'
     required: false
-    default: ${{ GITHUB_ACTION_REPOSITORY }}
+    default: 'GITHUB_ACTION_REPOSITORY'
   user_name:
     description: 'Github user name || Github 用户名'
     required: false
