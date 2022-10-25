@@ -30,7 +30,7 @@ inputs:
   publish_dir:
     description: 'Set an input directory for deployment. || 上传目录'
     required: false
-    default: ''
+    default: './'
 env:
   TZ: Asia/Shanghai
 runs:
