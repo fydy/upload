@@ -3,7 +3,7 @@ description: 在github action 运行Clone Repo并上传至自己仓库的新分�
 inputs:
   clone_repo_url:
     description: '需要克隆的仓库地址，不含`.git`'
-    required: true
+    required: false
   github_upload_repo:
     description: '上传仓库地址'
     required: false
@@ -45,22 +45,40 @@ inputs:
     description: 'Set an input directory for deployment. || 上传目录'
     required: false
     default: './'
+  keep_files:
+    description: 'Do not submit uploaded files or directories. || 不提交上传的文件或者目录'
+    required: false
+    default: ''
   custom_command:
     description: '自定义命令'
     required: false
+  custom_build_command:
+    description: '自定义构建命令，如hexo hugo博客'
+    required: false
+    default: ''
 env:
   TZ: Asia/Shanghai
 runs:
+  echo "#################################################"
+  echo "Starting Build Action"
   using: "composite"
   steps:
-    - name: Clone Repo
+    - name: Custom Build Command
+      if: ${{ inputs.custom_build_command }}
       shell: bash
       run: |
-        dir_temp=repo_temp
+        ${{ inputs.custom_build_command }}
+    - name: Clone Repo
+      if: ${{ inputs.clone_repo_url }}
+      shell: bash
+      run: |
         clone_url=${{ inputs.clone_repo_url }}
-        git clone ${{ inputs.clone_repo_url }} $dir_temp
+        git clone ${{ inputs.clone_repo_url }} repo_temp
         git config --global user.email "${{ inputs.github_user_email }}"
         git config --global user.name "${{ inputs.github_user_name }}"
+        cat >  ./repo_temp/.gitignore  << EOF
+        ${{ ${{ inputs.keep_files }} }}
+        EOF
     - name: Sync to Github
       if: ${{ inputs.github_token }}
       shell: bash
@@ -84,4 +102,6 @@ runs:
           cd ..
           }
           mirror ${{ inputs.gitee_user_name }} ${{ inputs.gitee_token }} ${{ inputs.gitee_upload_repo }} ${{ inputs.publish_branch }}
+  echo "#################################################"
+  echo "Completed the Hugo Action"
   #       cd ${{ github.action_path }} && ls -a && pwd
