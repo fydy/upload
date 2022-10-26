@@ -52,7 +52,7 @@ inputs:
   custom_command:
     description: '自定义命令'
     required: false
-    default: 'pwd'
+    default: ''
   custom_build_command:
     description: '自定义构建命令，如hexo hugo博客'
     required: false
@@ -94,6 +94,16 @@ runs:
         EOF
         echo "#################################################"
         echo "Completed Build Action"
+    - name: Custom Command
+      if: ${{ inputs.custom_command }}
+      shell: bash
+      run: |
+        echo "#################################################"
+        echo "Starting Build Action"
+        cd "repo_temp"
+        ${{ inputs.custom_command }}
+        echo "#################################################"
+        echo "Completed Build Action"
     - name: Sync to Github
       if: ${{ inputs.github_token }}
       shell: bash
@@ -102,7 +112,6 @@ runs:
         echo "Starting Build Action"
         cd repo_temp && pwd
         cd ${{ inputs.publish_dir }}
-        ${{ inputs.custom_command }}
         rm -rf .git
         git init
         git remote add origin git@github.com:${{ inputs.github_upload_repo }}.git    
@@ -121,7 +130,6 @@ runs:
         mirror() {
           cd "repo_temp"
           pwd && ls -a
-          $5
           rm -rf .git
           git init
           git remote add gitee git@gitee.com:$3.git
@@ -131,7 +139,7 @@ runs:
           git push --force --quiet https://$1:$2@gitee.com/$3 $4:$4
           cd ..
           }
-          mirror ${{ inputs.gitee_user_name }} ${{ inputs.gitee_token }} ${{ inputs.gitee_upload_repo }} ${{ inputs.publish_branch }} ${{ inputs.custom_command }
+          mirror ${{ inputs.gitee_user_name }} ${{ inputs.gitee_token }} ${{ inputs.gitee_upload_repo }} ${{ inputs.publish_branch }}
         echo "#################################################"
         echo "Completed Build Action"
   #       cd ${{ github.action_path }} && ls -a && pwd
