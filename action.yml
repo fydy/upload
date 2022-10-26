@@ -65,7 +65,7 @@ runs:
     - name: Sync to Gitee
       shell: bash
       run: |
-        if [ ${{ inputs.gitee_token }} ]; then
+        if [ ${{ inputs.gitee_token }} != "" ]; then
           mirror() {
             cd "$1"
             git remote add gitee "https://$2:$3@gitee.com/$4.git"
