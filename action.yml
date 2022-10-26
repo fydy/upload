@@ -63,7 +63,7 @@ runs:
         git config --global user.name "${{ inputs.github_user_name }}"
     - name: Sync to Github
       shell: bash
-      if: ${{ inputs.github_token }} != "None"
+      if: ${{ inputs.github_token }} != "None"; then
       run: |
         cd repo_temp && pwd
         cd ${{ inputs.publish_dir }}
