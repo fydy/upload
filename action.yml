@@ -62,12 +62,14 @@ runs:
         git config --global user.name "${{ inputs.github_user_name }}"
         cd ${{ inputs.publish_dir }}
         ${{ inputs.custom_command }} && rm -rf .git && git init && git remote add origin git@github.com:${{ inputs.github_upload_repo }}.git && git add . && git checkout -b ${{ inputs.publish_branch }} && git commit -m "GitHub Actions Auto Builder at $(date +'%Y-%m-%d %H:%M:%S')" && git push --force --quiet https://${{ inputs.github_user_name }}:${{ inputs.github_token }}@github.com/${{ inputs.github_upload_repo }} ${{ inputs.publish_branch }}:${{ inputs.publish_branch }}
+        pwd && ls -a
     - name: Sync to Gitee
       if: ${{ inputs.gitee_token }} != ""
       shell: bash
       run: |
         mirror() {
-          cd "${{ github.action_path }}/repo_temp/$1"
+          pwd && ls -a
+          cd "${{ github.action_path }}/repo_temp"
           git remote add gitee git@gitee.com:$4.git
           git add .
           git checkout -b $5
