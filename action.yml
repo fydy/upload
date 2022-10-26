@@ -20,7 +20,7 @@ inputs:
   gitee_token:
     description: 'The deploy key for Gitee repo || Gitee 上传密匙'
     required: false
-    default: ''
+    default: 'None'
   publish_branch:
     description: 'Set a target branch for deployment. || 上传分支'
     required: false
@@ -63,7 +63,7 @@ runs:
         git config --global user.name "${{ inputs.github_user_name }}"
     - name: Sync to Github
       shell: bash
-      if: ${{ inputs.github_token }} != ""
+      if: ${{ inputs.github_token }} != "None"
       run: |
         cd repo_temp && pwd
         cd ${{ inputs.publish_dir }}
