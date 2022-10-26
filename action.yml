@@ -51,15 +51,19 @@ env:
 runs:
   using: "composite"
   steps:
-    - name: upload
+    - name: Clone Repo
       shell: bash
       run: |
+        dir_temp=repo_temp
         clone_url=${{ inputs.clone_repo_url }}
-        git clone ${{ inputs.clone_repo_url }} repo_temp
-        cd repo_temp
-        ls
+        git clone ${{ inputs.clone_repo_url }} $dir_temp
         git config --global user.email "${{ inputs.github_user_email }}"
         git config --global user.name "${{ inputs.github_user_name }}"
+    - name: Sync to Github
+      if: ${{ inputs.github_token }} != ""
+      shell: bash
+      run: |
+        cd repo_temp && pwd
         cd ${{ inputs.publish_dir }}
         ${{ inputs.custom_command }} && rm -rf .git && git init && git remote add origin git@github.com:${{ inputs.github_upload_repo }}.git && git add . && git checkout -b ${{ inputs.publish_branch }} && git commit -m "GitHub Actions Auto Builder at $(date +'%Y-%m-%d %H:%M:%S')" && git push --force --quiet https://${{ inputs.github_user_name }}:${{ inputs.github_token }}@github.com/${{ inputs.github_upload_repo }} ${{ inputs.publish_branch }}:${{ inputs.publish_branch }}
         pwd && ls -a
@@ -70,12 +74,12 @@ runs:
         mirror() {
           pwd && ls -a
           cd "repo_temp"
-          rm -rf .git && git init && git remote add gitee git@gitee.com:$4.git
+          ${{ inputs.custom_command }} && rm -rf .git && git init && git remote add gitee git@gitee.com:$4.git
           git checkout -b $5
           git add .
           git commit -m "GitHub Actions Auto Builder at $(date +'%Y-%m-%d %H:%M:%S')"
           git push --force --quiet https://$2:$3@gitee.com/$4 $5:$5
           cd ..
           }
-          mirror ${{ inputs.publish_dir }} ${{ inputs.gitee_user_name }} ${{ inputs.gitee_token }} ${{ inputs.gitee_upload_repo }} ${{ inputs.publish_branch }}
+          mirror $dir_temp ${{ inputs.gitee_user_name }} ${{ inputs.gitee_token }} ${{ inputs.gitee_upload_repo }} ${{ inputs.publish_branch }}
   #       cd ${{ github.action_path }} && ls -a && pwd
