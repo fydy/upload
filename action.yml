@@ -63,6 +63,15 @@ env:
 runs:
   using: "composite"
   steps:
+    - name: Setup Author identity
+      shell: bash
+      run: |
+        echo "#################################################"
+        echo "Starting Build Action"
+        git config --global user.email "${{ inputs.github_user_email }}"
+        git config --global user.name "${{ inputs.github_user_name }}"
+        echo "#################################################"
+        echo "Completed Build Action"
     - name: Custom Build Command
       if: ${{ inputs.custom_build_command }}
       shell: bash
