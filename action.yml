@@ -82,7 +82,7 @@ runs:
         git config --global user.email "${{ inputs.github_user_email }}"
         git config --global user.name "${{ inputs.github_user_name }}"
         cat >  ./repo_temp/.gitignore  << EOF
-        ${{ ${{ inputs.keep_files }} }}
+        ${{ inputs.keep_files }}
         EOF
         echo "#################################################"
         echo "Completed Build Action"
