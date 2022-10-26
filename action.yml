@@ -20,6 +20,7 @@ inputs:
   gitee_token:
     description: 'The deploy key for Gitee repo || Gitee 上传密匙'
     required: false
+    default: ''
   publish_branch:
     description: 'Set a target branch for deployment. || 上传分支'
     required: false
@@ -35,6 +36,7 @@ inputs:
   github_token:
     description: 'The deploy key for Github Pages repo || Github 上传密匙'
     required: true
+    default: ''
   commit_msg:
     description: 'Git commit messages to your GitHub Pages repository.'
     required: false
