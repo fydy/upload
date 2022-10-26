@@ -121,7 +121,7 @@ runs:
         mirror() {
           cd "repo_temp"
           pwd && ls -a
-          ${{ inputs.custom_command }
+          $5
           rm -rf .git
           git init
           git remote add gitee git@gitee.com:$3.git
@@ -131,7 +131,7 @@ runs:
           git push --force --quiet https://$1:$2@gitee.com/$3 $4:$4
           cd ..
           }
-          mirror ${{ inputs.gitee_user_name }} ${{ inputs.gitee_token }} ${{ inputs.gitee_upload_repo }} ${{ inputs.publish_branch }}
+          mirror ${{ inputs.gitee_user_name }} ${{ inputs.gitee_token }} ${{ inputs.gitee_upload_repo }} ${{ inputs.publish_branch }} ${{ inputs.custom_command }
         echo "#################################################"
         echo "Completed Build Action"
   #       cd ${{ github.action_path }} && ls -a && pwd
