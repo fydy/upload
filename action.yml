@@ -4,19 +4,31 @@ inputs:
   clone_repo_url:
     description: '需要克隆的仓库地址，不含`.git`'
     required: true
-  upload_repo:
+  github_upload_repo:
     description: '上传仓库地址'
     required: false
     default: ${{ github.repository }}
+  gitee_upload_repo:
+    description: '上传至gitee仓库地址'
+    required: false
+  gitee_user_name:
+    description: 'Gitee user name || Gitee 用户名'
+    required: false
+  gitee_user_email:
+    description: 'Gitee email || Gitee 邮箱地址'
+    required: false
+  gitee_token:
+    description: 'The deploy key for Gitee repo || Gitee 上传密匙'
+    required: false
   publish_branch:
     description: 'Set a target branch for deployment. || 上传分支'
     required: false
     default: $(basename $clone_url .git)
-  user_name:
+  github_user_name:
     description: 'Github user name || Github 用户名'
     required: false
     default: 'github.actor'
-  user_email:
+  github_user_email:
     description: 'Github email || Github 邮箱地址'
     required: false
     default: '41898282+github-actions[bot]@users.noreply.github.com'
@@ -46,8 +58,21 @@ runs:
         git clone ${{ inputs.clone_repo_url }} repo_temp
         cd repo_temp
         ls
-        git config --global user.email "${{ inputs.user_email }}"
-        git config --global user.name "${{ inputs.user_name }}"
+        git config --global user.email "${{ inputs.github_user_email }}"
+        git config --global user.name "${{ inputs.github_user_name }}"
         cd ${{ inputs.publish_dir }}
-        ${{ inputs.custom_command }} && rm -rf .git && git init && git remote add origin git@github.com:${{ inputs.upload_repo }}.git && git add . && git checkout -b ${{ inputs.publish_branch }} && git commit -m "GitHub Actions Auto Builder at $(date +'%Y-%m-%d %H:%M:%S')" && git push --force --quiet https://${{ inputs.user_name }}:${{ inputs.github_token }}@github.com/${{ inputs.upload_repo }} ${{ inputs.publish_branch }}:${{ inputs.publish_branch }}
+        ${{ inputs.custom_command }} && rm -rf .git && git init && git remote add origin git@github.com:${{ inputs.upload_repo }}.git && git add . && git checkout -b ${{ inputs.publish_branch }} && git commit -m "GitHub Actions Auto Builder at $(date +'%Y-%m-%d %H:%M:%S')" && git push --force --quiet https://${{ inputs.github_user_name }}:${{ inputs.github_token }}@github.com/${{ inputs.upload_repo }} ${{ inputs.publish_branch }}:${{ inputs.publish_branch }}
+    - name: Sync to Gitee
+      shell: bash
+      run: |
+        if ${{ inputs.gitee_token }} ; then
+          mirror() {
+            cd "$1"
+            git remote add gitee "https://$2:$3@gitee.com/$4.git"
+            git remote set-head origin -d
+            git checkout -b $5
+            git push --force --quiet https://$2:$3@gitee.com/$4 $5:$5
+            cd ..
+            }
+            mirror ${{ inputs.publish_dir }} ${{ inputs.gitee_user_name }} ${{ inputs.gitee_token }} ${{ inputs.gitee_upload_repo }} ${{ inputs.publish_branch }}
  #       cd ${{ github.action_path }} && ls -a && pwd
