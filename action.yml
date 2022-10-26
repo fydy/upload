@@ -31,6 +31,9 @@ inputs:
     description: 'Set an input directory for deployment. || 上传目录'
     required: false
     default: './'
+  custom_command:
+    description: '自定义命令'
+    required: false
 env:
   TZ: Asia/Shanghai
 runs:
@@ -46,5 +49,6 @@ runs:
         git config --global user.email "${{ inputs.user_email }}"
         git config --global user.name "${{ inputs.user_name }}"
         cd ${{ inputs.publish_dir }}
+        ${{ inputs.custom_command }}
         rm -rf .git && git init && git remote add origin git@github.com:${{ inputs.upload_repo }}.git && git add . && git checkout -b ${{ inputs.publish_branch }} && git commit -m "GitHub Actions Auto Builder at $(date +'%Y-%m-%d %H:%M:%S')" && git push --force --quiet https://${{ inputs.user_name }}:${{ inputs.github_token }}@github.com/${{ inputs.upload_repo }} ${{ inputs.publish_branch }}:${{ inputs.publish_branch }}
  #       cd ${{ github.action_path }} && ls -a && pwd
