@@ -36,7 +36,7 @@ inputs:
   github_token:
     description: 'The deploy key for Github Pages repo || Github 上传密匙'
     required: true
-    default: ''
+    default: 'None'
   commit_msg:
     description: 'Git commit messages to your GitHub Pages repository.'
     required: false
