@@ -64,7 +64,7 @@ runs:
     - name: Sync to Github
       shell: bash
       run: |
-        if [ ${{ inputs.gitee_token }} =!= "" ]; then
+        if [ ${{ inputs.gitee_token }} == "" ]; then
           echo "未定义github密实，跳过执行" >> $GITHUB_OUTPUT
         else
           echo "files_exists=false" >> $GITHUB_OUTPUT
