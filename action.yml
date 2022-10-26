@@ -58,8 +58,7 @@ inputs:
     default: ''
 env:
   TZ: Asia/Shanghai
-echo "#################################################"
-echo "Starting Build Action"
+
 runs:
   using: "composite"
   steps:
@@ -67,11 +66,17 @@ runs:
       if: ${{ inputs.custom_build_command }}
       shell: bash
       run: |
+        echo "#################################################"
+        echo "Starting Build Action"
         ${{ inputs.custom_build_command }}
+        echo "#################################################"
+        echo "Completed Build Action"
     - name: Clone Repo
       if: ${{ inputs.clone_repo_url }}
       shell: bash
       run: |
+        echo "#################################################"
+        echo "Starting Build Action"
         clone_url=${{ inputs.clone_repo_url }}
         git clone ${{ inputs.clone_repo_url }} repo_temp
         git config --global user.email "${{ inputs.github_user_email }}"
@@ -79,18 +84,26 @@ runs:
         cat >  ./repo_temp/.gitignore  << EOF
         ${{ ${{ inputs.keep_files }} }}
         EOF
+        echo "#################################################"
+        echo "Completed Build Action"
     - name: Sync to Github
       if: ${{ inputs.github_token }}
       shell: bash
       run: |
+        echo "#################################################"
+        echo "Starting Build Action"
         cd repo_temp && pwd
         cd ${{ inputs.publish_dir }}
         ${{ inputs.custom_command }} && rm -rf .git && git init && git remote add origin git@github.com:${{ inputs.github_upload_repo }}.git && git add . && git checkout -b ${{ inputs.publish_branch }} && git commit -m "GitHub Actions Auto Builder at $(date +'%Y-%m-%d %H:%M:%S')" && git push --force --quiet https://${{ inputs.github_user_name }}:${{ inputs.github_token }}@github.com/${{ inputs.github_upload_repo }} ${{ inputs.publish_branch }}:${{ inputs.publish_branch }}
         pwd && ls -a
+        echo "#################################################"
+        echo "Completed Build Action"
     - name: Sync to Gitee
       if: ${{ inputs.gitee_token }}
       shell: bash
       run: |
+        echo "#################################################"
+        echo "Starting Build Action"
         mirror() {
           cd "repo_temp"
           pwd && ls -a
@@ -102,6 +115,6 @@ runs:
           cd ..
           }
           mirror ${{ inputs.gitee_user_name }} ${{ inputs.gitee_token }} ${{ inputs.gitee_upload_repo }} ${{ inputs.publish_branch }}
-echo "#################################################"
-echo "Completed Build Action"
+        echo "#################################################"
+        echo "Completed Build Action"
   #       cd ${{ github.action_path }} && ls -a && pwd
