@@ -68,9 +68,10 @@ runs:
       run: |
         mirror() {
           cd "$1"
-          git remote add gitee "https://$2:$3@gitee.com/$4.git"
-          git remote set-head origin -d
+          git remote add gitee git@gitee.com:$4.git
+          git add .
           git checkout -b $5
+          git commit -m "GitHub Actions Auto Builder at $(date +'%Y-%m-%d %H:%M:%S')"
           git push --force --quiet https://$2:$3@gitee.com/$4 $5:$5
           cd ..
           }
