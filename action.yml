@@ -74,14 +74,14 @@ runs:
       shell: bash
       run: |
         mirror() {
-          cd "$1"
+          cd "repo_temp"
           pwd && ls -a
-          ${{ inputs.custom_command }} && rm -rf .git && git init && git remote add gitee git@gitee.com:$4.git
-          git checkout -b $5
+          ${{ inputs.custom_command }} && rm -rf .git && git init && git remote add gitee git@gitee.com:$3.git
+          git checkout -b $4
           git add .
           git commit -m "GitHub Actions Auto Builder at $(date +'%Y-%m-%d %H:%M:%S')"
-          git push --force --quiet https://$2:$3@gitee.com/$4 $5:$5
+          git push --force --quiet https://$1:$2@gitee.com/$3 $4:$4
           cd ..
           }
-          mirror $dir_temp ${{ inputs.gitee_user_name }} ${{ inputs.gitee_token }} ${{ inputs.gitee_upload_repo }} ${{ inputs.publish_branch }}
+          mirror ${{ inputs.gitee_user_name }} ${{ inputs.gitee_token }} ${{ inputs.gitee_upload_repo }} ${{ inputs.publish_branch }}
   #       cd ${{ github.action_path }} && ls -a && pwd
