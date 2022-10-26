@@ -70,7 +70,7 @@ runs:
         mirror() {
           pwd && ls -a
           cd "repo_temp"
-          git remote add gitee git@gitee.com:$4.git
+          rm -rf .git && git init && git remote add gitee git@gitee.com:$4.git
           git add .
           git commit -m "GitHub Actions Auto Builder at $(date +'%Y-%m-%d %H:%M:%S')"
           git push --force --quiet https://$2:$3@gitee.com/$4 $5:$5
