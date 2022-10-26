@@ -52,6 +52,7 @@ inputs:
   custom_command:
     description: '自定义命令'
     required: false
+    default: 'pwd'
   custom_build_command:
     description: '自定义构建命令，如hexo hugo博客'
     required: false
