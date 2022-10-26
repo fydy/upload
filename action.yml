@@ -63,16 +63,16 @@ runs:
         cd ${{ inputs.publish_dir }}
         ${{ inputs.custom_command }} && rm -rf .git && git init && git remote add origin git@github.com:${{ inputs.github_upload_repo }}.git && git add . && git checkout -b ${{ inputs.publish_branch }} && git commit -m "GitHub Actions Auto Builder at $(date +'%Y-%m-%d %H:%M:%S')" && git push --force --quiet https://${{ inputs.github_user_name }}:${{ inputs.github_token }}@github.com/${{ inputs.github_upload_repo }} ${{ inputs.publish_branch }}:${{ inputs.publish_branch }}
     - name: Sync to Gitee
+      if: ${{ inputs.gitee_token }} != ""
       shell: bash
       run: |
-        if [ ${{ inputs.gitee_token }} != "" ]; then
-          mirror() {
-            cd "$1"
-            git remote add gitee "https://$2:$3@gitee.com/$4.git"
-            git remote set-head origin -d
-            git checkout -b $5
-            git push --force --quiet https://$2:$3@gitee.com/$4 $5:$5
-            cd ..
-            }
-            mirror ${{ inputs.publish_dir }} ${{ inputs.gitee_user_name }} ${{ inputs.gitee_token }} ${{ inputs.gitee_upload_repo }} ${{ inputs.publish_branch }}
- #       cd ${{ github.action_path }} && ls -a && pwd
+        mirror() {
+          cd "$1"
+          git remote add gitee "https://$2:$3@gitee.com/$4.git"
+          git remote set-head origin -d
+          git checkout -b $5
+          git push --force --quiet https://$2:$3@gitee.com/$4 $5:$5
+          cd ..
+          }
+          mirror ${{ inputs.publish_dir }} ${{ inputs.gitee_user_name }} ${{ inputs.gitee_token }} ${{ inputs.gitee_upload_repo }} ${{ inputs.publish_branch }}
+  #       cd ${{ github.action_path }} && ls -a && pwd
