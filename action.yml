@@ -70,6 +70,7 @@ runs:
         echo "#################################################"
         echo "Starting Build Action"
         mkdir repo_temp
+        cd repo_temp
         ${{ inputs.custom_build_command }}
         echo "#################################################"
         echo "Completed Build Action"
