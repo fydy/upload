@@ -81,6 +81,13 @@ runs:
         git clone ${{ inputs.clone_repo_url }} repo_temp
         git config --global user.email "${{ inputs.github_user_email }}"
         git config --global user.name "${{ inputs.github_user_name }}"
+        echo "#################################################"
+        echo "Completed Build Action"
+    - name: Keep Files
+      shell: bash
+      run: |
+        echo "#################################################"
+        echo "Starting Build Action"
         cat >  ./repo_temp/.gitignore  << EOF
         ${{ inputs.keep_files }}
         EOF
