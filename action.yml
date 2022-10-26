@@ -67,7 +67,7 @@ runs:
       shell: bash
       run: |
         mirror() {
-          cd "$1"
+          cd "${{ github.action_path }}/repo_temp/$1"
           git remote add gitee git@gitee.com:$4.git
           git add .
           git checkout -b $5
