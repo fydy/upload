@@ -71,6 +71,7 @@ runs:
           pwd && ls -a
           cd "repo_temp"
           rm -rf .git && git init && git remote add gitee git@gitee.com:$4.git
+          git checkout -b $5
           git add .
           git commit -m "GitHub Actions Auto Builder at $(date +'%Y-%m-%d %H:%M:%S')"
           git push --force --quiet https://$2:$3@gitee.com/$4 $5:$5
