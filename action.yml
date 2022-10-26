@@ -129,7 +129,7 @@ runs:
         echo "#################################################"
         echo "Starting Build Action"
         mirror() {
-          cd "repo_temp"
+          cd "$5"
           pwd && ls -a
           rm -rf .git
           git init
@@ -140,7 +140,7 @@ runs:
           git push --force --quiet https://$1:$2@gitee.com/$3 $4:$4
           cd ..
           }
-          mirror ${{ inputs.gitee_user_name }} ${{ inputs.gitee_token }} ${{ inputs.gitee_upload_repo }} ${{ inputs.publish_branch }}
+          mirror ${{ inputs.gitee_user_name }} ${{ inputs.gitee_token }} ${{ inputs.gitee_upload_repo }} ${{ inputs.publish_branch }} ${{ inputs.publish_dir }}
         echo "#################################################"
         echo "Completed Build Action"
   #       cd ${{ github.action_path }} && ls -a && pwd
