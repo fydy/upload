@@ -58,9 +58,9 @@ inputs:
     default: ''
 env:
   TZ: Asia/Shanghai
+echo "#################################################"
+echo "Starting Build Action"
 runs:
-  echo "#################################################"
-  echo "Starting Build Action"
   using: "composite"
   steps:
     - name: Custom Build Command
@@ -102,6 +102,6 @@ runs:
           cd ..
           }
           mirror ${{ inputs.gitee_user_name }} ${{ inputs.gitee_token }} ${{ inputs.gitee_upload_repo }} ${{ inputs.publish_branch }}
-  echo "#################################################"
-  echo "Completed the Hugo Action"
+echo "#################################################"
+echo "Completed Build Action"
   #       cd ${{ github.action_path }} && ls -a && pwd
