@@ -62,7 +62,7 @@ runs:
         git config --global user.email "${{ inputs.github_user_email }}"
         git config --global user.name "${{ inputs.github_user_name }}"
     - name: Sync to Github
-      if: ${{ inputs.github_token }} != ''
+      if: ${{ inputs.github_token }}
       shell: bash
       run: |
         cd repo_temp && pwd
